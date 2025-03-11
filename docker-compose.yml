@@ -8,14 +8,15 @@ services:
     container_name: app
     networks:
       - node-network
-
     tty: true
     ports:
       - "3000:3000"
     depends_on:
       - db
-
-
+    volumes:
+      - ./node:/usr/src/app 
+    working_dir: /usr/src/app 
+    command: ["npm", "run", "dev"] 
 
   db:
     image: mysql:5.7
@@ -25,15 +26,11 @@ services:
     tty: true
     volumes:
       - ./mysql:/var/lib/mysql
-
     environment:
       - MYSQL_DATABASE=nodedb
       - MYSQL_ROOT_PASSWORD=root
-
-
     networks:
-    - node-network
-
+      - node-network
 
   nginx:
     build:
@@ -42,10 +39,8 @@ services:
       - "8080:80"
     depends_on:
       - app
-    
     networks:
-    - node-network
-
+      - node-network
 
 networks:
   node-network:
