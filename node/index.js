@@ -37,17 +37,6 @@ app.get('/', (req, res) => {
   });
 
 
-// rota pra criar a tabela (jogo rapido so para nao precisar acessar o container)
-app.get('/createTable', (req, res) => {
-    const sql = `CREATE TABLE people(id int NOT NULL AUTO_INCREMENT, name varchar(255) NOT NULL, PRIMARY KEY(id))`;
-
-    connection.query(sql, (err, result) => {
-      if (err) throw err;
-      res.send('Tabela criada com sucesso');
-    });
-  });
-
-
 // rota para adicionar pessoas
 app.post('/add', (req, res) => {
 
@@ -62,6 +51,24 @@ app.post('/add', (req, res) => {
   }); 
   
 
+// rota para adicionar pessoas (por url params)
+app.get('/add', (req, res) => {
+    const name = req.query.name;
+
+    if (!name) {
+        return res.status(400).send('nome é necessário');
+    }
+
+    const post = { name }
+    const sql = 'INSERT INTO people SET ?';
+
+
+    connection.query(sql, post, (err, result) => {
+      if (err) throw err;
+      res.send('Dados inseridos com sucesso');
+    });
+  }); 
+  
 
 
 app.listen(port, () => {
