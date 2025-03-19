@@ -14,6 +14,17 @@ connection.connect((err) => {
 });
   
 
+connection.query(
+  `CREATE TABLE IF NOT EXISTS people (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      name VARCHAR(255) NOT NULL
+  )`,
+  (err, result) => {
+    if (err) throw err;
+    console.log("Tabela 'people' verificada/criada com sucesso!");
+  }
+);
+
 
 // rota inicial
 app.get('/', (req, res) => {
